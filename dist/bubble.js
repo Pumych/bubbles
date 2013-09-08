@@ -1,4 +1,12 @@
 (function() {
+	function constrainVelocity(velocity) {
+		if (Math.abs(velocity) > game.config.maxVelocity) {
+			velocity = Math.abs(velocity) / velocity * game.config.maxVelocity
+		}
+
+		return velocity;
+	}
+
 	game.bubble = {
 		id: null,
 		x: null,
@@ -25,8 +33,7 @@
 					distance = Math.sqrt(dx*dx + dy*dy),
 					minDist = game.bubbles[i].diameter/2 + this.diameter/2;
 
-				var maxVelocity = game.config.maxVelocity,
-					spring = game.config.spring,
+				var spring = game.config.spring,
 					bubbles = game.bubbles;
 
 				if (distance <= minDist) {
@@ -38,22 +45,15 @@
 
 					this.velocity.x -= ax;
 					this.velocity.y -= ay;
-					if (Math.abs(this.velocity.x) > maxVelocity) {
-						this.velocity.x = Math.abs(this.velocity.x) / this.velocity.x * maxVelocity
-					}
-					if (Math.abs(this.velocity.y) > maxVelocity) {
-						this.velocity.y = Math.abs(this.velocity.y) / this.velocity.y * maxVelocity
-					}
+
+					this.velocity.x = constrainVelocity(this.velocity.x);
+					this.velocity.y = constrainVelocity(this.velocity.y);
 
 					bubbles[i].velocity.x += ax;
 					bubbles[i].velocity.y += ay;
 
-					if (Math.abs(bubbles[i].velocity.x) > maxVelocity) {
-						bubbles[i].velocity.x = Math.abs(bubbles[i].velocity.x) / bubbles[i].velocity.x * maxVelocity
-					}
-					if (Math.abs(bubbles[i].velocity.y) > maxVelocity) {
-						bubbles[i].velocity.y = Math.abs(bubbles[i].velocity.y) / bubbles[i].velocity.y * maxVelocity
-					}
+					bubbles[i].velocity.x = constrainVelocity(bubbles[i].velocity.x);
+					bubbles[i].velocity.y = constrainVelocity(bubbles[i].velocity.y);
 				}
 			}
 		},
