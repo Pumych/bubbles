@@ -2,6 +2,7 @@
 	background: url('../gfx/background.png');
 }
 .overlay {
+	pointer-events: none;
 	width: 640px;
 	height: 480px;
 }
@@ -28,6 +29,8 @@
 #energy {
 	bottom: 0px;
 	left: 10px;
+	text-align: right;
+	width: 85px;
 }
 .energy-text {
 	bottom: 6px;
