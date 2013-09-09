@@ -28,8 +28,8 @@
 			this.diameter = diameter;
 
 			this.velocity = Object.create({
-				x: 0,//Math.floor(Math.random() * 10) - 5,
-				y: 0,//Math.floor(Math.random() * 10) - 5
+				x: 0,
+				y: 0
 			});
 
 			this.type = id % 2 === 1;
@@ -60,7 +60,7 @@
 				var dx = game.bubbles[i].x - this.x,
 					dy = game.bubbles[i].y - this.y,
 					distance = Math.sqrt(dx*dx + dy*dy),
-					minDist = (game.bubbles[i].diameter + game.bubbles[i].energy) / 2 + (this.diameter + this.energy) / 2;
+					minDist = (game.bubbles[i].diameter - game.bubbles[i].energy) / 2 + (this.diameter - this.energy) / 2;
 
 				var spring = game.config.spring,
 					bubbles = game.bubbles;
@@ -88,14 +88,11 @@
 
 
 					if (this.energy > 1 && bubbles[i].energy <= 1 && !this.paused) {
-						if (this.diameter + this.energy >= bubbles[i].diameter + bubbles[i].energy) {
-							if (bubbles[i].power <= 0) bubbles[i].destroy();
-						}
-
+						bubbles[i].power = Math.floor(bubbles[i].power - this.energy / 2);
+						if (bubbles[i].power <= 0) bubbles[i].destroy();
 					} else if (this.energy <= 1 && bubbles[i].energy > 1 && !bubbles[i].paused) {
-						if (bubbles[i].diameter + bubbles[i].energy >= this.diameter + this.energy) {
-							if (this.power <= 0) this.destroy();
-						}
+						this.power = Math.floor(this.power - bubbles[i].energy / 2);
+						if (this.power <= 0) this.destroy();
 					}
 				}
 			}
@@ -112,7 +109,7 @@
 		move: function() {
 			if (this.paused === true) return;
 
-			var radius = (this.diameter + this.energy) / 2;
+			var radius = (this.diameter - this.energy) / 2;
 
 			//console.log(this.velocity.x + ' ' + this.velocity.x / this.velocity.x * (this.energy / 10));
 
@@ -148,7 +145,14 @@
 		},
 
 		render: function() {
-			game.gfx.drawBubble(this.x, this.y, this.diameter + this.energy, this.type, this.paused ? this.paused : this.energy > 1);
+			game.gfx.drawBubble(
+				this.x,
+				this.y,
+				this.diameter - this.energy,
+				this.type,
+				this.paused ? this.paused : this.energy > 1,
+				this.power
+			);
 		}
 	}
 

@@ -16,7 +16,7 @@
 		return canvas;
 	};
 
-	game.gfx.drawBubble = function(x, y, diameter, type, fill) {
+	game.gfx.drawBubble = function(x, y, diameter, type, fill, text) {
 		if (type == 1) {
 			ctx.strokeStyle = '#B9FF73';
 			if (fill === true) {
@@ -35,6 +35,14 @@
 
 		if (fill === true) {
 			ctx.fill();
+		} else {
+			ctx.fillStyle = "#555";
+			var font = diameter / 5 +"px impact";
+			ctx.font = font;
+
+			var width = ctx.measureText(text).width;
+			var height = ctx.measureText("_").width;
+			ctx.fillText(text, x - (width/2) ,y + (height/2));
 		}
 	};
 

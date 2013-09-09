@@ -56,7 +56,7 @@ var game = {};
         	mouseY = mouse.y;
 		}, false);
 
-		canvas.addEventListener('mouseup', function(ev) {
+		function releaseTrigger(ev) {
 			var mouse = getMousePos(ev);
 
 			if (paused !== null) {
@@ -83,7 +83,10 @@ var game = {};
 			}
 			paused = null;
 			game.player.deactivate();
-		});
+		}
+
+		canvas.addEventListener('mouseup', releaseTrigger);
+		canvas.addEventListener('mouseout', releaseTrigger);
 	};
 
 	game.draw = function() {
